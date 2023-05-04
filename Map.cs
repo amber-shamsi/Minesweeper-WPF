@@ -10,7 +10,7 @@ public class Map
 {
     public static Cell[,] minesweeperCells;
     public static Button[,] minesweeperButtons;
-    public static bool[,] bombArray;
+    
     static int windowHeight = 1000;
     static int windowWidth = 800;
     static bool usingTextFile = false;
@@ -81,7 +81,7 @@ public class Map
         gridDimension = dimension;
         minesweeperCells = new Cell[gridDimension, gridDimension];
         minesweeperButtons = new Button[gridDimension, gridDimension];
-        bombArray = new bool[gridDimension, gridDimension];
+        GameManager.bombArray = new bool[gridDimension, gridDimension];
 
         // Create the Grid
         minefield.Width = 750;
@@ -99,10 +99,10 @@ public class Map
             int x = random.Next(0, gridDimension - 1);
             int y = random.Next(0, gridDimension - 1);
 
-            if (bombArray[x,y] != true)
+            if (GameManager.bombArray[x,y] != true)
             {
                 Trace.WriteLine("Attempting " + p + " Bomb Placement: " + x + " " + y);
-                bombArray[x, y] = true;
+                GameManager.bombArray[x, y] = true;
                 p++;
             }
             
@@ -119,30 +119,38 @@ public class Map
             for (int j = 0; j < gridDimension; j++)
             {
                 
+                // create button
                 Button btn = new Button();
+                // create Cell
                 minesweeperCells[i, j] = new Cell(i, j, btn);
                 minesweeperButtons[i, j] = btn;
-                btn.Content = i.ToString() + " - " + j.ToString();
+                btn.Content = "";
+                // Set position of button
                 Grid.SetColumn(btn, j);
                 Grid.SetRow(btn, i);
                 minefield.Children.Add(btn);
                 btn.PreviewMouseLeftButtonDown += minesweeperCells[i, j].CheckAdjacent;
                 btn.PreviewMouseRightButtonDown += minesweeperCells[i, j].FlagCell;
-                if (bombArray[i,j] == true)
+                if (GameManager.bombArray[i,j] == true)
                 {
                     btn.PreviewMouseLeftButtonDown -= minesweeperCells[i, j].CheckAdjacent;
                     btn.PreviewMouseLeftButtonDown += minesweeperCells[i, j].ClickedBomb;
                 }
             }
         }
-
-
-        
-
+        SetButtons();
     }
 
-    public static void SetGridDimension(int chosenDimension)
+    private static void SetButtons()
     {
-        gridDimension = chosenDimension;
+        for (int i = 0; i < gridDimension; i++)
+        {
+            // for each box create cell and button
+            for (int j = 0; j < gridDimension; j++)
+            {
+                minesweeperCells[i, j].SetComparison();
+                minesweeperCells[i, j].CalculateNearbyBombs();
+            }
+        }
     }
 }

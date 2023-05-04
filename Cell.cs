@@ -6,38 +6,46 @@ using System.Diagnostics;
 using System.Security.Cryptography.Xml;
 using System.Windows.Input;
 using System.Runtime.CompilerServices;
+using Minesweeper;
 
 public class Cell
 {
-
-    bool isBomb;
-    Cell[] adjacent = new Cell[8];
+    Button button;
+    
+    // Cell[] adjacent = new Cell[8]; // implement to shortcut calculation of adjacent
+    // int foundX;
+    // int foundY;
     public int locationX;
     public int locationY;
-    static int adjacentBombs = 0;
-    Button button;
-    int comparisonCase;
+
+    int adjacentBombs = 0;
+    int comparisonCase = 0;
+    
     bool isRevealed;
     bool isFlagged;
-    static int foundX;
-    static int foundY;
+    bool isBomb;
 
     int x1;
-    int y1;
-
     int x2;
-    int y2;
-
     int x3;
+    
+    int y1;
+    int y2;
     int y3;
+
+
 
     public Cell(int x, int y, Button btn)
 	{
+        button = btn;
+
         locationX = x;
         locationY = y;
+
         isBomb = false;
-        button = btn;
         isRevealed = false;
+        isFlagged = false;
+
         comparisonCase = 0;
 
         x1 = locationX + 1;
@@ -48,73 +56,10 @@ public class Cell
 
         x3 = locationX;
         y3 = locationY;
-
-        isFlagged = false;
-
     }
 
-    public void CheckAdjacent(object sender, MouseButtonEventArgs e)
+    public void SetComparison()
     {
-        Trace.WriteLine("clackd");
-        RevealButton();      
-        
-    }
-
-    private void HoverCells()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void FlagCell(object sender, MouseButtonEventArgs e)
-    {
-        isFlagged = !isFlagged;
-        if (isFlagged)
-        {
-            button.Content = "|>";
-        }
-        else
-        {
-            button.Content = "|>";
-        }
-    }
-
-    private static Cell GetCell(Button btn)
-    {
-
-        try {
-            for (int i = 0; i < Map.gridDimension; i++)
-            {
-                for (int j = 0; j < Map.gridDimension; j++)
-                {
-                    if (Map.minesweeperButtons[i, j] == btn)
-                    {
-                        Trace.WriteLine(i.ToString() + j.ToString());
-                        foundX = i;
-                        foundY = j;
-                        return Map.GetCell(i, j);
-                       
-                    }
-                }
-            }
-            return null;
-        }
-        catch { return null; }
-        
-    }
-
-    void CalculateNearbyBombs()
-    {
-        if(isRevealed)
-        {
-            return;
-        }
-
-        isRevealed = true;
-
-        adjacentBombs = 0;
-        
-        comparisonCase = 0;
-        
         // good
         if (x3 > 0 && x3 < Map.gridDimension - 1 && y3 > 0 && y3 < Map.gridDimension - 1)
         {
@@ -148,48 +93,105 @@ public class Cell
         // x max y max
         else if (x3 == Map.gridDimension - 1 && y3 == Map.gridDimension - 1)
         {
-
             comparisonCase = 7;
         }
+        // x max y min
+        else if (x3 == Map.gridDimension - 1 && y3 == 0)
+        {
+            comparisonCase = 8;
+        }
+        // y max x min
+        else if (y3 == Map.gridDimension - 1 && x3 == 0)
+        {
+            comparisonCase = 9;
+        }
+    }
 
+    public void CheckAdjacent(object sender, MouseButtonEventArgs e)
+    {
+        RevealButton();      
+    }
+
+    public void FlagCell(object sender, MouseButtonEventArgs e)
+    {
+        
+        if (!isFlagged && !isRevealed)
+        {
+            isFlagged = !isFlagged;
+            button.Content = "|>";
+        }
+        else if (isFlagged && !isRevealed)
+        {
+            isFlagged = !isFlagged;
+            button.Content = "";
+        }
+    }
+    /*
+    private Cell GetCell(Button btn)
+    {
+
+        try {
+            for (int i = 0; i < Map.gridDimension; i++)
+            {
+                for (int j = 0; j < Map.gridDimension; j++)
+                {
+                    if (Map.minesweeperButtons[i, j] == btn)
+                    {
+                        Trace.WriteLine(i.ToString() + j.ToString());
+                        foundX = i;
+                        foundY = j;
+                        return Map.GetCell(i, j);
+                       
+                    }
+                }
+            }
+            return null;
+        }
+        catch { return null; }
+    }*/
+
+    public void CalculateNearbyBombs()
+    {
+        adjacentBombs = 0;
         switch (comparisonCase)
         {
             case 0:
+                adjacentBombs = 99;
                 break;
             // if x is fine and y is fine
             case 1:
                 // check all x-1
-                if (Map.bombArray[x2, y1])
+                if (GameManager.bombArray[x2, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y2])
+                if (GameManager.bombArray[x2, y2])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y3])
+                if (GameManager.bombArray[x2, y3])
                 {
                     adjacentBombs++;
                 }
                 // check all x values
-                if (Map.bombArray[x3, y1])
+                if (GameManager.bombArray[x3, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x3, y2])
+                if (GameManager.bombArray[x3, y2])
                 {
                     adjacentBombs++;
                 }
                 // check all x+1
-                if (Map.bombArray[x1, y1])
+                if (GameManager.bombArray[x1, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x1, y2])
+                if (GameManager.bombArray[x1, y2])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x1, y3])
+                if (GameManager.bombArray[x1, y3])
                 {
                     adjacentBombs++;
                 }
@@ -197,24 +199,24 @@ public class Cell
             // x min
             case 2:
                 // check all x
-                if (Map.bombArray[x3, y1])
+                if (GameManager.bombArray[x3, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x3, y2])
+                if (GameManager.bombArray[x3, y2])
                 {
                     adjacentBombs++;
                 }
                 // check all x+1
-                if (Map.bombArray[x1, y1])
+                if (GameManager.bombArray[x1, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x1, y2])
+                if (GameManager.bombArray[x1, y2])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x1, y3])
+                if (GameManager.bombArray[x1, y3])
                 {
                     adjacentBombs++;
                 }
@@ -222,24 +224,24 @@ public class Cell
             // x max
             case 3:
                 // check all x-1
-                if (Map.bombArray[x2, y1])
+                if (GameManager.bombArray[x2, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y2])
+                if (GameManager.bombArray[x2, y2])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y3])
+                if (GameManager.bombArray[x2, y3])
                 {
                     adjacentBombs++;
                 }
                 // check all x values
-                if (Map.bombArray[x2, y1])
+                if (GameManager.bombArray[x3, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y2])
+                if (GameManager.bombArray[x3, y2])
                 {
                     adjacentBombs++;
                 }
@@ -247,24 +249,24 @@ public class Cell
             // y min
             case 4:
                 // check all y values
-                if (Map.bombArray[x1, y3])
+                if (GameManager.bombArray[x1, y3])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y3])
+                if (GameManager.bombArray[x2, y3])
                 {
                     adjacentBombs++;
                 }
                 // check all y+1
-                if (Map.bombArray[x1, y1])
+                if (GameManager.bombArray[x1, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y1])
+                if (GameManager.bombArray[x2, y1])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x3, y1])
+                if (GameManager.bombArray[x3, y1])
                 {
                     adjacentBombs++;
                 }
@@ -272,24 +274,24 @@ public class Cell
             // y max
             case 5:
                 // check all y-1
-                if (Map.bombArray[x1, y2])
+                if (GameManager.bombArray[x1, y2])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y2])
+                if (GameManager.bombArray[x2, y2])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x3, y2])
+                if (GameManager.bombArray[x3, y2])
                 {
                     adjacentBombs++;
                 }
                 // check all y values
-                if (Map.bombArray[x1, y3])
+                if (GameManager.bombArray[x1, y3])
                 {
                     adjacentBombs++;
                 }
-                if (Map.bombArray[x2, y3])
+                if (GameManager.bombArray[x2, y3])
                 {
                     adjacentBombs++;
                 }
@@ -297,47 +299,77 @@ public class Cell
             // x min y min
             case 6:
                     // check x+1 y values
-                    if (Map.bombArray[x1, y3])
+                    if (GameManager.bombArray[x1, y3])
                     {
                         adjacentBombs++;
                     }
                     // check x+1 y+1
-                    if (Map.bombArray[x1, y1])
+                    if (GameManager.bombArray[x1, y1])
                     {
                         adjacentBombs++;
                     }
                     // x y+1
-                    if (Map.bombArray[x3, y1])
+                    if (GameManager.bombArray[x3, y1])
                     {
                         adjacentBombs++;
                     }
                 break; 
-            // x max y max
             case 7:
                 // check x y-1 values
-                if (Map.bombArray[x3, y2])
+                if (GameManager.bombArray[x3, y2])
                 {
                     adjacentBombs++;
                 }
                 // check x
-                if (Map.bombArray[x2, y3])
+                if (GameManager.bombArray[x2, y3])
                 {
                     adjacentBombs++;
                 }
                 // x y+1
-                if (Map.bombArray[x2, y2])
+                if (GameManager.bombArray[x2, y2])
                 {
                     adjacentBombs++;
                 }
                 break;
-        }
-        
-        button.Content = adjacentBombs.ToString();
+            // x max y min
+            case 8:
+                // check x-1 y++
+                if (GameManager.bombArray[x2, y1])
+                {
+                    adjacentBombs++;
+                }
+                // check x-1 y
+                if (GameManager.bombArray[x2, y3])
+                {
+                    adjacentBombs++;
+                }
+                // check x and y++
+                if (GameManager.bombArray[x3, y1])
+                {
+                    adjacentBombs++;
+                }
+                break;
+            case 9:
+                // x min y max
+                // check y x++
+                if (GameManager.bombArray[x1, y3])
+                {
+                    adjacentBombs++;
+                }
+                // check y-1  x
+                if (GameManager.bombArray[x3, y2])
+                {
+                    adjacentBombs++;
+                }
+                // check y-1 x++
+                if (GameManager.bombArray[x1, y2])
+                {
+                    adjacentBombs++;
+                }
+                break;
 
-        if (adjacentBombs == 0)
-        {
-            NoneAdjacent();   
         }
+
     }
 
     private Button GetButton(int foundX, int foundY)
@@ -423,6 +455,24 @@ public class Cell
                 // x y+1
                 Map.minesweeperCells[x2, y2].RevealButton();
                 break;
+            // x max y min
+            case 8:
+                // check x-1 y++
+                Map.minesweeperCells[x2, y1].RevealButton();
+                // check x-1 y
+                Map.minesweeperCells[x2, y3].RevealButton();
+                // check x and y++
+                Map.minesweeperCells[x3, y1].RevealButton();
+                break;
+            case 9:
+                // x min y max
+                // check y x++
+                Map.minesweeperCells[x1, y3].RevealButton();
+                // check y-1  x
+                Map.minesweeperCells[x3, y2].RevealButton();
+                // check y-1 x++
+                Map.minesweeperCells[x3, y2].RevealButton();
+                break;
         }
     }
 
@@ -430,9 +480,17 @@ public class Cell
 
     public void RevealButton()
     {
-        CalculateNearbyBombs();
-        
+        if (isRevealed)
+        {
+            return;
+        }
         button.Background = Brushes.LightGoldenrodYellow;
+        button.Content = adjacentBombs.ToString();
+        isRevealed = true;
+        if (adjacentBombs == 0)
+        {
+            NoneAdjacent();
+        }
     }
 
     public void ClickedBomb(object sender, RoutedEventArgs e)
@@ -441,7 +499,8 @@ public class Cell
         {
             Button btn = sender as Button;
             btn.Foreground = Brushes.Blue;
-            Trace.WriteLine("Bomb idiot");
+            btn.Content = "AAAAAAAAAAAAAAAAAAAAAAAAA";
+            MainWindow.game.EndGame(false);
         }
         
     }
