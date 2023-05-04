@@ -30,7 +30,7 @@ namespace Minesweeper
 
             // Display Start Screen
 
-            game.DisplayStartScreeen();
+            game.DisplayStartScreen();
 
         }
 

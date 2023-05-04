@@ -2,10 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Diagnostics;
-using System.Security.Cryptography.Xml;
 using System.Windows.Input;
-using System.Runtime.CompilerServices;
 using Minesweeper;
 
 public class Cell
@@ -33,7 +30,8 @@ public class Cell
     int y2;
     int y3;
 
-    Uri bombEffect = new Uri("C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3");
+    string bombEffect = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3";
+    
     
     
     public Cell(int x, int y, Button btn)
@@ -517,16 +515,19 @@ public class Cell
     {
         if (!isFlagged)
         {
-            Button btn = sender as Button;
+            isRevealed = true;
 
-            btn.Foreground = Brushes.Blue;
-            btn.Content = "AAAAAAAAAAAAAAAAAAAAAAAAA";
+            button.Foreground = Brushes.Blue;
+            button.Content = "AAAAAAAAAAAAAAAAAAAAAAAAA";
 
             MediaPlayer player = new MediaPlayer();
-            player.Open(bombEffect);
+            Uri bombEffectUri = new Uri(bombEffect);
+            player.Open(bombEffectUri);
             player.Play();
 
             MainWindow.game.EndGame(false);
+
+
         }
     }
 

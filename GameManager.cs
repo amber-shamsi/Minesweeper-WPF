@@ -25,9 +25,11 @@ public class GameManager
 
 	public void EndGame(bool win)
 	{
+
 		if (win)
 		{
-
+            // change content to equal endgame
+            minesweeperWindow.Content = null;
 		}
 		else
 		{
@@ -35,14 +37,13 @@ public class GameManager
 		}
 	}
 
-    public void DisplayStartScreeen()
+    public void DisplayStartScreen()
     {
         Grid myGrid = new Grid();
         myGrid.Width = 700;
         myGrid.Height = 700;
         myGrid.HorizontalAlignment = HorizontalAlignment.Center;
-        myGrid.VerticalAlignment = VerticalAlignment.Bottom;
-        myGrid.ShowGridLines = true;
+        myGrid.VerticalAlignment = VerticalAlignment.Center;
 
         // Create columns and rows
         for (int i = 0; i < 5; i++)
@@ -60,16 +61,17 @@ public class GameManager
         fileGameGenerator.Content = "I do literally\n  nothing.\n\n Just like my\n   creator.";
         fileGameGenerator.FontSize = 20;
 
-        randomGameGenerator.Content = " Randomly\nGenerated\n  Game";
+        randomGameGenerator.Content = " Randomly\nGenerated\n    Game";
         randomGameGenerator.FontSize = 20;
 
-        chooseDimension.Text = "Type your map size here.\n10 to 50";
+        chooseDimension.Text = "Type your map size here.\n\n10 to 50";
         chooseDimension.FontSize = 20;
+        chooseDimension.HorizontalContentAlignment = HorizontalAlignment.Center;
+        chooseDimension.VerticalContentAlignment = VerticalAlignment.Center;
         chooseDimension.TextWrapping = TextWrapping.Wrap;
 
         // set click function
         randomGameGenerator.Click += AttemptGameInitialisation;
-        fileGameGenerator.Click += AttemptFileInitialisation;
 
         // set location
         Grid.SetColumn(randomGameGenerator, 1);
@@ -93,11 +95,6 @@ public class GameManager
         startMenuObjects.Add(randomGameGenerator);
         startMenuObjects.Add(fileGameGenerator);
         startMenuObjects.Add(chooseDimension);
-    }
-
-    private void AttemptFileInitialisation(object sender, RoutedEventArgs e)
-    {
-        
     }
 
     private void AttemptGameInitialisation(object sender, RoutedEventArgs e)
@@ -125,7 +122,6 @@ public class GameManager
         }
 
     }
-
 
     // check dimensions are accetptable ie 
     private static void StartButtonClick(object sender, RoutedEventArgs e)
