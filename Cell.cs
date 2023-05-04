@@ -15,8 +15,8 @@ public class Cell
     // Cell[] adjacent = new Cell[8]; // implement to shortcut calculation of adjacent
     // int foundX;
     // int foundY;
-    public int locationX;
-    public int locationY;
+    int locationX;
+    int locationY;
 
     int adjacentBombs = 0;
     int comparisonCase = 0;
@@ -33,8 +33,8 @@ public class Cell
     int y2;
     int y3;
 
-
-
+    
+    
     public Cell(int x, int y, Button btn)
 	{
         button = btn;
@@ -126,29 +126,7 @@ public class Cell
             button.Content = "";
         }
     }
-    /*
-    private Cell GetCell(Button btn)
-    {
-
-        try {
-            for (int i = 0; i < Map.gridDimension; i++)
-            {
-                for (int j = 0; j < Map.gridDimension; j++)
-                {
-                    if (Map.minesweeperButtons[i, j] == btn)
-                    {
-                        Trace.WriteLine(i.ToString() + j.ToString());
-                        foundX = i;
-                        foundY = j;
-                        return Map.GetCell(i, j);
-                       
-                    }
-                }
-            }
-            return null;
-        }
-        catch { return null; }
-    }*/
+    
 
     public void CalculateNearbyBombs()
     {
@@ -372,10 +350,7 @@ public class Cell
 
     }
 
-    private Button GetButton(int foundX, int foundY)
-    {
-        return Map.GetCell(foundX, foundY).button;
-    }
+
 
     void NoneAdjacent()
     {
@@ -478,7 +453,7 @@ public class Cell
 
 
 
-    public void RevealButton()
+    void RevealButton()
     {
         if (isRevealed)
         {
@@ -498,24 +473,20 @@ public class Cell
         if (!isFlagged)
         {
             Button btn = sender as Button;
+
             btn.Foreground = Brushes.Blue;
             btn.Content = "AAAAAAAAAAAAAAAAAAAAAAAAA";
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3"));
+            player.Play();
+
             MainWindow.game.EndGame(false);
         }
-        
     }
-
 
     public void PlaceBomb(Button element)
     {
         isBomb = true;
-        // element.MouseDown -= CheckAdjacent;
-        // element.MouseDown += ClickedBomb;
-    }
-
-    public bool CheckBomb()
-    {
-        return isBomb;
     }
 
 }

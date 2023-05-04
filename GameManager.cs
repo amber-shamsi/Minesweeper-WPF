@@ -104,7 +104,7 @@ public class GameManager
             int dimension;
             Int32.TryParse(chooseDimension.Text.ToString(), out dimension);
 
-            if (dimension > 0 && dimension <= 50)
+            if (dimension > 9 && dimension <= 50)
             {
                 Map.CreateGame(minesweeperWindow, dimension);
             }
@@ -116,7 +116,7 @@ public class GameManager
         }
         catch
         {
-            chooseDimension.Text = "Put a better number idiot";
+            chooseDimension.Text = "try again";
         }
 
     }
