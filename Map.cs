@@ -129,11 +129,11 @@ public class Map
                 Grid.SetColumn(btn, j);
                 Grid.SetRow(btn, i);
                 minefield.Children.Add(btn);
-                btn.PreviewMouseLeftButtonDown += minesweeperCells[i, j].CheckAdjacent;
+                btn.PreviewMouseLeftButtonDown += minesweeperCells[i, j].RevealCell;
                 btn.PreviewMouseRightButtonDown += minesweeperCells[i, j].FlagCell;
                 if (GameManager.bombArray[i,j] == true)
                 {
-                    btn.PreviewMouseLeftButtonDown -= minesweeperCells[i, j].CheckAdjacent;
+                    btn.PreviewMouseLeftButtonDown -= minesweeperCells[i, j].RevealCell;
                     btn.PreviewMouseLeftButtonDown += minesweeperCells[i, j].ClickedBomb;
                 }
             }

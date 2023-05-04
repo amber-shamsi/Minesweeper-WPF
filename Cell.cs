@@ -33,6 +33,7 @@ public class Cell
     int y2;
     int y3;
 
+    Uri bombEffect = new Uri("C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3");
     
     
     public Cell(int x, int y, Button btn)
@@ -60,7 +61,7 @@ public class Cell
 
     public void SetComparison()
     {
-        // good
+        // 8 tiles surrounding
         if (x3 > 0 && x3 < Map.gridDimension - 1 && y3 > 0 && y3 < Map.gridDimension - 1)
         {
             comparisonCase = 1;
@@ -107,14 +108,13 @@ public class Cell
         }
     }
 
-    public void CheckAdjacent(object sender, MouseButtonEventArgs e)
+    public void RevealCell(object sender, MouseButtonEventArgs e)
     {
         RevealButton();      
     }
 
     public void FlagCell(object sender, MouseButtonEventArgs e)
-    {
-        
+    {  
         if (!isFlagged && !isRevealed)
         {
             isFlagged = !isFlagged;
@@ -127,7 +127,7 @@ public class Cell
         }
     }
     
-
+    // sets adjacentBombs
     public void CalculateNearbyBombs()
     {
         adjacentBombs = 0;
@@ -345,14 +345,13 @@ public class Cell
                     adjacentBombs++;
                 }
                 break;
-
+                
         }
 
     }
 
-
-
-    void NoneAdjacent()
+    // When nothing is adjacent reveal all valid surrounding tiles
+    private void NoneAdjacent()
     {
         switch (comparisonCase)
         {
@@ -451,9 +450,54 @@ public class Cell
         }
     }
 
+    private void SetFontColour()
+    {
+        switch (adjacentBombs)
+        {
+            case 0:
+                break;
+
+            case 1:
+                button.Foreground = Brushes.BlueViolet;
+                break;
+
+            case 2:
+                button.Foreground = Brushes.LightGreen;
+                break;
+
+            case 3:
+                button.Foreground = Brushes.MediumVioletRed;
+                break;
+
+            case 4:
+                button.Foreground = Brushes.DarkGoldenrod;
+                break;
+
+            case 5:
+                button.Foreground = Brushes.PaleVioletRed;
+                break;
+
+            case 6:
+                button.Foreground = Brushes.CornflowerBlue;
+                break;
+          
+            case 7:
+                button.Foreground = Brushes.Peru;
+                break;
+          
+            case 8:
+                button.Foreground = Brushes.LavenderBlush;
+                break;
+
+            default:
+                button.Foreground = Brushes.BlanchedAlmond;
+
+                break;
+        }
+    }
 
 
-    void RevealButton()
+    private void RevealButton()
     {
         if (isRevealed)
         {
@@ -461,6 +505,7 @@ public class Cell
         }
         button.Background = Brushes.LightGoldenrodYellow;
         button.Content = adjacentBombs.ToString();
+        SetFontColour();
         isRevealed = true;
         if (adjacentBombs == 0)
         {
@@ -476,8 +521,9 @@ public class Cell
 
             btn.Foreground = Brushes.Blue;
             btn.Content = "AAAAAAAAAAAAAAAAAAAAAAAAA";
+
             MediaPlayer player = new MediaPlayer();
-            player.Open(new Uri("C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3"));
+            player.Open(bombEffect);
             player.Play();
 
             MainWindow.game.EndGame(false);

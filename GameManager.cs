@@ -57,11 +57,16 @@ public class GameManager
         chooseDimension = new TextBox();
 
         // set text
-        fileGameGenerator.Content = "NOT YET IMPLEMENTED";
-        randomGameGenerator.Content = "Randomly Generated Game";
+        fileGameGenerator.Content = "I do literally\n  nothing.\n\n Just like my\n   creator.";
+        fileGameGenerator.FontSize = 20;
+
+        randomGameGenerator.Content = " Randomly\nGenerated\n  Game";
+        randomGameGenerator.FontSize = 20;
+
         chooseDimension.Text = "Type your map size here.\n10 to 50";
         chooseDimension.FontSize = 20;
         chooseDimension.TextWrapping = TextWrapping.Wrap;
+
         // set click function
         randomGameGenerator.Click += AttemptGameInitialisation;
         fileGameGenerator.Click += AttemptFileInitialisation;
@@ -92,7 +97,7 @@ public class GameManager
 
     private void AttemptFileInitialisation(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        
     }
 
     private void AttemptGameInitialisation(object sender, RoutedEventArgs e)
