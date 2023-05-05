@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Collections.Generic;
 using Minesweeper;
+using System.Diagnostics;
 
 public class GameManager
 {
@@ -28,13 +29,15 @@ public class GameManager
 
 		if (win)
 		{
+            Trace.WriteLine("ew dont be such a tryhard");
             // change content to equal endgame
             minesweeperWindow.Content = null;
 		}
 		else
 		{
-
-		}
+            Trace.WriteLine("loser haha");
+            minesweeperWindow.Content = null;
+        }
 	}
 
     public void DisplayStartScreen()
@@ -105,7 +108,7 @@ public class GameManager
         {
             int dimension;
             Int32.TryParse(chooseDimension.Text.ToString(), out dimension);
-
+            flagArray = new bool[dimension, dimension];
             if (dimension > 9 && dimension <= 50)
             {
                 Map.CreateGame(minesweeperWindow, dimension);

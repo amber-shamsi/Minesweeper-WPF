@@ -113,16 +113,31 @@ public class Cell
 
     public void FlagCell(object sender, MouseButtonEventArgs e)
     {  
-        if (!isFlagged && !isRevealed)
+        if (!isFlagged)
         {
             isFlagged = !isFlagged;
             button.Content = "|>";
+            GameManager.flagArray[locationX, locationY] = true;
         }
         else if (isFlagged && !isRevealed)
         {
             isFlagged = !isFlagged;
             button.Content = "";
+            GameManager.flagArray[locationX, locationY] = false;
         }
+        // CHANGE ME to if flags match bombs
+        for(int i = 0; i < Map.gridDimension; i++)
+        {
+            for(int j = 0; j < Map.gridDimension; j++)
+            {
+                if(GameManager.flagArray[i,j] == GameManager.bombArray[i,j])
+                {
+                    continue;
+                }
+                return;
+            }
+        }
+        MainWindow.game.EndGame(true);
     }
     
     // sets adjacentBombs
@@ -494,7 +509,6 @@ public class Cell
         }
     }
 
-
     private void RevealButton()
     {
         if (isRevealed)
@@ -526,8 +540,6 @@ public class Cell
             player.Play();
 
             MainWindow.game.EndGame(false);
-
-
         }
     }
 
