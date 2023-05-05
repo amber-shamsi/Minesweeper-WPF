@@ -19,7 +19,7 @@ namespace Minesweeper
 
         public static int gridDimension = 15;
 
-        static readonly Grid minefield = new Grid();
+        static Grid minefield = new Grid();
 
 
         public Map()
@@ -44,6 +44,7 @@ namespace Minesweeper
         }
         private static void GenerateHeader()
         {
+
             // header grid
             Grid heading = new Grid();
             heading.Width = windowWidth;
@@ -90,6 +91,7 @@ namespace Minesweeper
         private static void GenerateButtonField(int dimension)
         {
             // Create the Grid
+            minefield = new Grid();
             minefield.Width = 750;
             minefield.Height = 750;
             minefield.HorizontalAlignment = HorizontalAlignment.Center;
@@ -97,8 +99,9 @@ namespace Minesweeper
             minefield.ShowGridLines = true;
 
             // Generate bombs 
-            int bombsToPlace = (int)Math.Ceiling((double)gridDimension * gridDimension * 0.2);
+            int bombsToPlace = (int)Math.Ceiling((double)gridDimension * gridDimension * 0.18);
             int p = 0;
+            bombsToPlace = 1;
             while (p < bombsToPlace)
             {
                 Random random = new Random();

@@ -30,10 +30,7 @@ public class Cell
     int y2;
     int y3;
 
-    string bombEffect = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3";
-    
-    
-    
+   
     public Cell(int x, int y, Button btn)
 	{
         button = btn;
@@ -113,7 +110,7 @@ public class Cell
 
     public void FlagCell(object sender, MouseButtonEventArgs e)
     {  
-        if (!isFlagged)
+        if (!isFlagged && !isRevealed)
         {
             isFlagged = !isFlagged;
             button.Content = "|>";
@@ -534,10 +531,7 @@ public class Cell
             button.Foreground = Brushes.Blue;
             button.Content = "AAAAAAAAAAAAAAAAAAAAAAAAA";
 
-            MediaPlayer player = new MediaPlayer();
-            Uri bombEffectUri = new Uri(bombEffect);
-            player.Open(bombEffectUri);
-            player.Play();
+            
 
             MainWindow.game.EndGame(false);
         }

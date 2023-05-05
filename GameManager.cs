@@ -5,6 +5,10 @@ using System.Windows;
 using System.Collections.Generic;
 using Minesweeper;
 using System.Diagnostics;
+using System.Numerics;
+using System.Windows.Media;
+using System.Windows.Controls.Primitives;
+using System.Windows.Automation;
 
 public class GameManager
 {
@@ -12,12 +16,26 @@ public class GameManager
     public static bool[,] bombArray;
 
     TextBox chooseDimension = new TextBox();
-    List<object> startMenuObjects = new List<object>();
-    List<object> gameObjects = new List<object>();
-    List<object> endGameObjects = new List<object>();
 
     public static Grid myGrid;
+
     static Window minesweeperWindow = Application.Current.MainWindow;
+
+    static string loseEffectString = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3";
+    static string winSoundEffect = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\winSound.mp3";
+    static string winVideoString = "C:\\\\Users\\\\pranc\\\\Dropbox\\\\_Employment\\\\_The Software Institute 17-04-2023\\\\C# Projects\\\\Minesweeper\\\\winVideo.mp4";
+    static string loseVideoString = "C:\\\\Users\\\\pranc\\\\Dropbox\\\\_Employment\\\\_The Software Institute 17-04-2023\\\\C# Projects\\\\Minesweeper\\\\loseVideo.mp4";
+
+    MediaPlayer winnerPlayer    = new MediaPlayer();
+    MediaPlayer winVideo        = new MediaPlayer();
+    MediaElement mediaElement   = new MediaElement();
+    MediaPlayer loserPlayer     = new MediaPlayer();
+    VideoDrawing videoDrawer    = new VideoDrawing();
+
+    static Uri winEffectUri     = new Uri(winSoundEffect);
+    static Uri winVideoUri      = new Uri(winVideoString);
+    static Uri loseEffectUri    = new Uri(loseEffectString);
+    static Uri loseVideoUri     = new Uri(loseVideoString);
 
     public GameManager()
 	{
@@ -29,16 +47,51 @@ public class GameManager
 
 		if (win)
 		{
-            Trace.WriteLine("ew dont be such a tryhard");
-            // change content to equal endgame
+            winnerPlayer.Volume = 0.25;
+            winnerPlayer.Open(winEffectUri);
+            winnerPlayer.Play();
+
             minesweeperWindow.Content = null;
-		}
+
+            MainWindow.game.DisplayStartScreen();
+
+            DisplayWinScreen();
+        }
 		else
 		{
-            Trace.WriteLine("loser haha");
+            loserPlayer.Open(loseEffectUri);
+            loserPlayer.Play();
+
             minesweeperWindow.Content = null;
+
+            MainWindow.game.DisplayStartScreen();
         }
 	}
+
+    private void DisplayWinScreen()
+    {
+        DisplayVideoPopup(winVideoUri);
+    }
+
+    private void DisplayLoseScreen()
+    {
+        DisplayVideoPopup(loseVideoUri);
+    }
+
+    private void DisplayVideoPopup(Uri videoUri)
+    {
+        Window popup = new Window();
+
+        winVideo.Open(videoUri);
+
+        mediaElement.LoadedBehavior = MediaState.Manual;
+        mediaElement.Source = videoUri;
+
+        popup.Content = mediaElement;
+        popup.Show();
+
+        mediaElement.Play();
+    }
 
     public void DisplayStartScreen()
     {
