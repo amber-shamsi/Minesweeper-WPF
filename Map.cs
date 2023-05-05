@@ -94,7 +94,6 @@ namespace Minesweeper
             // Generate bombs 
             int bombsToPlace = (int)Math.Ceiling((double)s_GridDimension * s_GridDimension * 0.18);
             int p = 0;
-            bombsToPlace = 1;
             while (p < bombsToPlace)
             {
                 Random random = new Random();
