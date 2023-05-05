@@ -12,30 +12,30 @@ using System.Windows.Automation;
 
 public class GameManager
 {
-	public static bool[,] flagArray;
-    public static bool[,] bombArray;
+	public static bool[,] s_FlagArray;
+    public static bool[,] s_BombArray;
 
     TextBox chooseDimension = new TextBox();
 
-    public static Grid myGrid;
+    public static Grid s_MenuGrid;
 
-    static Window minesweeperWindow = Application.Current.MainWindow;
+    static Window s_minesweeperWindow = Application.Current.MainWindow;
 
-    static string loseEffectString = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3";
-    static string winSoundEffect = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\winSound.mp3";
-    static string winVideoString = "C:\\\\Users\\\\pranc\\\\Dropbox\\\\_Employment\\\\_The Software Institute 17-04-2023\\\\C# Projects\\\\Minesweeper\\\\winVideo.mp4";
-    static string loseVideoString = "C:\\\\Users\\\\pranc\\\\Dropbox\\\\_Employment\\\\_The Software Institute 17-04-2023\\\\C# Projects\\\\Minesweeper\\\\loseVideo.mp4";
+    static string s_loseEffectString = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\wilhelmScream.mp3";
+    static string s_winSoundEffect = "C:\\Users\\pranc\\Dropbox\\_Employment\\_The Software Institute 17-04-2023\\C# Projects\\Minesweeper\\winSound.mp3";
+    static string s_winVideoString = "C:\\\\Users\\\\pranc\\\\Dropbox\\\\_Employment\\\\_The Software Institute 17-04-2023\\\\C# Projects\\\\Minesweeper\\\\winVideo.mp4";
+    static string s_loseVideoString = "C:\\\\Users\\\\pranc\\\\Dropbox\\\\_Employment\\\\_The Software Institute 17-04-2023\\\\C# Projects\\\\Minesweeper\\\\loseVideo.mp4";
 
-    MediaPlayer winnerPlayer    = new MediaPlayer();
-    MediaPlayer winVideo        = new MediaPlayer();
+    MediaPlayer winnerPlayer = new MediaPlayer();
+    MediaPlayer winVideo = new MediaPlayer();
     MediaElement mediaElement   = new MediaElement();
-    MediaPlayer loserPlayer     = new MediaPlayer();
-    VideoDrawing videoDrawer    = new VideoDrawing();
+    MediaPlayer loserPlayer = new MediaPlayer();
+    VideoDrawing videoDrawer = new VideoDrawing();
 
-    static Uri winEffectUri     = new Uri(winSoundEffect);
-    static Uri winVideoUri      = new Uri(winVideoString);
-    static Uri loseEffectUri    = new Uri(loseEffectString);
-    static Uri loseVideoUri     = new Uri(loseVideoString);
+    static Uri s_winEffectUri = new Uri(s_winSoundEffect);
+    static Uri s_winVideoUri = new Uri(s_winVideoString);
+    static Uri s_loseEffectUri = new Uri(s_loseEffectString);
+    static Uri s_loseVideoUri = new Uri(s_loseVideoString);
 
     public GameManager()
 	{
@@ -48,10 +48,10 @@ public class GameManager
 		if (win)
 		{
             winnerPlayer.Volume = 0.25;
-            winnerPlayer.Open(winEffectUri);
+            winnerPlayer.Open(s_winEffectUri);
             winnerPlayer.Play();
 
-            minesweeperWindow.Content = null;
+            s_minesweeperWindow.Content = null;
 
             MainWindow.game.DisplayStartScreen();
 
@@ -59,10 +59,10 @@ public class GameManager
         }
 		else
 		{
-            loserPlayer.Open(loseEffectUri);
+            loserPlayer.Open(s_loseEffectUri);
             loserPlayer.Play();
 
-            minesweeperWindow.Content = null;
+            s_minesweeperWindow.Content = null;
 
             MainWindow.game.DisplayStartScreen();
         }
@@ -70,12 +70,12 @@ public class GameManager
 
     private void DisplayWinScreen()
     {
-        DisplayVideoPopup(winVideoUri);
+        DisplayVideoPopup(s_winVideoUri);
     }
 
     private void DisplayLoseScreen()
     {
-        DisplayVideoPopup(loseVideoUri);
+        DisplayVideoPopup(s_loseVideoUri);
     }
 
     private void DisplayVideoPopup(Uri videoUri)
@@ -85,7 +85,7 @@ public class GameManager
         winVideo.Open(videoUri);
 
         mediaElement.LoadedBehavior = MediaState.Manual;
-        mediaElement.Source = videoUri;
+        mediaElement.Source         = videoUri;
 
         popup.Content = mediaElement;
         popup.Show();
@@ -95,11 +95,11 @@ public class GameManager
 
     public void DisplayStartScreen()
     {
-        Grid myGrid = new Grid();
-        myGrid.Width = 700;
-        myGrid.Height = 700;
-        myGrid.HorizontalAlignment = HorizontalAlignment.Center;
-        myGrid.VerticalAlignment = VerticalAlignment.Center;
+        Grid myGrid     = new Grid();
+        myGrid.Width    = 700;
+        myGrid.Height   = 700;
+        myGrid.HorizontalAlignment  = HorizontalAlignment.Center;
+        myGrid.VerticalAlignment    = VerticalAlignment.Center;
 
         // Create columns and rows
         for (int i = 0; i < 5; i++)
@@ -109,22 +109,22 @@ public class GameManager
         }
 
         // create buttons
-        Button randomGameGenerator = new Button();
-        Button fileGameGenerator = new Button();
-        chooseDimension = new TextBox();
+        Button randomGameGenerator  = new Button();
+        Button fileGameGenerator    = new Button();
+        chooseDimension             = new TextBox();
 
         // set text
-        fileGameGenerator.Content = "I do literally\n  nothing.\n\n Just like my\n   creator.";
-        fileGameGenerator.FontSize = 20;
+        fileGameGenerator.Content   = "I do literally\n  nothing.\n\n Just like my\n   creator.";
+        fileGameGenerator.FontSize  = 20;
 
-        randomGameGenerator.Content = " Randomly\nGenerated\n    Game";
-        randomGameGenerator.FontSize = 20;
+        randomGameGenerator.Content     = " Randomly\nGenerated\n    Game";
+        randomGameGenerator.FontSize    = 20;
 
-        chooseDimension.Text = "Type your map size here.\n\n10 to 50";
-        chooseDimension.FontSize = 20;
-        chooseDimension.HorizontalContentAlignment = HorizontalAlignment.Center;
-        chooseDimension.VerticalContentAlignment = VerticalAlignment.Center;
-        chooseDimension.TextWrapping = TextWrapping.Wrap;
+        chooseDimension.Text        = "Type your map size here.\n\n10 to 50";
+        chooseDimension.FontSize    = 20;
+        chooseDimension.HorizontalContentAlignment  = HorizontalAlignment.Center;
+        chooseDimension.VerticalContentAlignment    = VerticalAlignment.Center;
+        chooseDimension.TextWrapping                = TextWrapping.Wrap;
 
         // set click function
         randomGameGenerator.Click += AttemptGameInitialisation;
@@ -144,13 +144,8 @@ public class GameManager
         myGrid.Children.Add(chooseDimension);
 
         // Add grid to window content
-        minesweeperWindow.Content = myGrid;
-        minesweeperWindow.Show();
-
-        // add elements to list
-        startMenuObjects.Add(randomGameGenerator);
-        startMenuObjects.Add(fileGameGenerator);
-        startMenuObjects.Add(chooseDimension);
+        s_minesweeperWindow.Content = myGrid;
+        s_minesweeperWindow.Show();
     }
 
     private void AttemptGameInitialisation(object sender, RoutedEventArgs e)
@@ -160,28 +155,23 @@ public class GameManager
         try
         {
             int dimension;
+
             Int32.TryParse(chooseDimension.Text.ToString(), out dimension);
-            flagArray = new bool[dimension, dimension];
+
+            s_FlagArray = new bool[dimension, dimension];
+
             if (dimension > 9 && dimension <= 50)
             {
-                Map.CreateGame(minesweeperWindow, dimension);
+                Map.CreateGame(s_minesweeperWindow, dimension);
             }
             else
             {
                 chooseDimension.Text = "Put a better number idiot";
             }
-
         }
         catch
         {
             chooseDimension.Text = "try again";
         }
-
-    }
-
-    // check dimensions are accetptable ie 
-    private static void StartButtonClick(object sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
     }
 }
